@@ -6,4 +6,4 @@ Lesson-5: Forms
 input => event.target.value | value
 select => event.target.value | value повинен в собі мати option з атрибутом value
 checkbox=> event.target.value | cheked
-radio => event.target.value | cheked атрибут name повинен бути одинаковий
+radio => event.target.value | cheked атрибут name повинен бути одинаковий.
