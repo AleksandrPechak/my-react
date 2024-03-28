@@ -3,11 +3,15 @@ import clsx from 'clsx';
 
 import { fetchTours } from '../../helpers/getTours';
 import TourItem from '../tour-item/TourItem';
+import TourForm from '../tourForm/TourForm';
 
 import './Tours.scss';
 
 const Tours = ({ theme }) => {
-	const [tours, setTours] = useState([]);
+	const [isOpen, setIsOpen] = useState(false);
+	const [tours, setTours] = useState(null);
+
+	const [searchValue, setSearchValue] = useState('');
 
 	useEffect(() => {
 		// console.log('work after mount in Tours page');
@@ -30,7 +34,38 @@ const Tours = ({ theme }) => {
 		}
 	}, []);
 
-	// console.log('render Tours', tours);
+	const handleChangeSearch = (event) => {
+		setSearchValue(() => event.target.value);
+	};
+
+	// Modal actions
+
+	const handleOpenModal = () => {
+		setIsOpen(true);
+	};
+
+	const handleCloseModal = () => {
+		setIsOpen(false);
+	};
+
+	// Tour action
+
+	const handleAddTour = (tourItem) => {
+		setTours((prevState) => {
+			// return new state
+			return [...prevState, tourItem];
+		});
+	};
+
+	const handleDeleteTour = (id) => {
+		const nextTours = [...tours];
+		const index = nextTours.findIndex((tour) => tour.id === id);
+		nextTours.splice(index, 1);
+		setTours(nextTours);
+	};
+
+	const filteredTours =
+		tours && tours.filter((tour) => tour.name.toLowerCase().includes(searchValue.toLowerCase()));
 
 	return (
 		<main
@@ -38,18 +73,34 @@ const Tours = ({ theme }) => {
 				light: theme === 'light',
 				dark: theme === 'dark',
 			})}>
-			<h4>Tours Page</h4>
+			<div className='tours-page-top'>
+				<h4>Tours Page</h4>
+
+				<input
+					type='text'
+					value={searchValue}
+					placeholder='Search...'
+					onChange={handleChangeSearch}
+				/>
+
+				<button className='btn secondary' onClick={handleOpenModal}>
+					Add tour
+				</button>
+			</div>
+
+			<TourForm visible={isOpen} onClose={handleCloseModal} onAddTour={handleAddTour} />
 
 			<ul className='tours-list'>
-				{tours.length > 0 ? (
+				{filteredTours && filteredTours.length && filteredTours.length > 0 ? (
 					<>
-						{tours.map((tour) => (
-							<TourItem key={tour.id} {...tour} />
+						{filteredTours.map((tour) => (
+							<TourItem key={tour.id} {...tour} onDelete={handleDeleteTour} />
 						))}
 					</>
 				) : (
-					<p>loading...</p>
+					<p>no tours acccording your search</p>
 				)}
+				{filteredTours === null && <p>...loading</p>}
 			</ul>
 		</main>
 	);
