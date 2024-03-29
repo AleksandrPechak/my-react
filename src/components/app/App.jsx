@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-
-
 import dayjs from 'dayjs';
 
 import Header from '../header/Header';
@@ -10,9 +8,11 @@ import Footer from '../footer/Footer';
 const App = () => {
 	const [theme, setTheme] = useState('dark');
 	const [lastUpdatedDate, setLastUpdatedDate] = useState(null);
+	// const [counter, setCounter] = useState(0);
 
 	useEffect(() => {
 		// console.log('work useEffect in App', dayjs().format('HH:mm:ss MMMM,DD'));
+		// console.log('work useEffect in App');
 		setLastUpdatedDate(dayjs());
 	}, [theme]);
 
@@ -24,6 +24,7 @@ const App = () => {
 		}
 	};
 
+	// console.log('render App', lastUpdatedDate);
 	return (
 		<div className='app-container'>
 			<Header theme={theme} toggleTheme={toggleTheme} lastUpdatedDate={lastUpdatedDate} />
