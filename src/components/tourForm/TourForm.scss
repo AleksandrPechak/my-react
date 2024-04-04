@@ -1,7 +1,9 @@
 .tour-form {
     position: fixed;
     width: 600px;
-    background: #fff;
+    overflow: auto;
+    height: 450px;
+    background: #efec35;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

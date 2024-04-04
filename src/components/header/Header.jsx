@@ -20,11 +20,11 @@ const Header = (props) => {
 	return (
 		<header>
 			<div className='controlls'>
-				<SiYourtraveldottv />
 				<button className='btn primary' onClick={props.toggleTheme}>
 					Toggle Theme {props.theme}
 				</button>
 
+				<SiYourtraveldottv />
 			</div>
 			{props.lastUpdatedDate && (
 				<p>Last updated:{props.lastUpdatedDate.format('HH:mm:ss MMMM,DD')}</p>
