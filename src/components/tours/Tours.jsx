@@ -6,6 +6,7 @@ import TourItem from '../tour-item/TourItem';
 import TourForm from '../tourForm/TourForm';
 
 import './Tours.scss';
+import TourFormik from '../tourFormik/TourFormik';
 
 const Tours = ({ theme }) => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +36,7 @@ const Tours = ({ theme }) => {
 	}, []);
 
 	const handleChangeSearch = (event) => {
-		setSearchValue(() => event.target.value);
+		setSearchValue(event.target.value);
 	};
 
 	// Modal actions
@@ -88,17 +89,22 @@ const Tours = ({ theme }) => {
 				</button>
 			</div>
 
-			<TourForm visible={isOpen} onClose={handleCloseModal} onAddTour={handleAddTour} />
+			{/* <TourForm visible={isOpen} onClose={handleCloseModal} onAddTour={handleAddTour} /> */}
+			<TourFormik visible={isOpen} onClose={handleCloseModal} onAddTour={handleAddTour} />
 
 			<ul className='tours-list'>
-				{filteredTours && filteredTours.length && filteredTours.length > 0 ? (
+				{filteredTours && (
 					<>
-						{filteredTours.map((tour) => (
-							<TourItem key={tour.id} {...tour} onDelete={handleDeleteTour} />
-						))}
+						{filteredTours.length > 0 ? (
+							<>
+								{filteredTours.map((tour) => (
+									<TourItem key={tour.id} {...tour} onDelete={handleDeleteTour} />
+								))}
+							</>
+						) : (
+							<p>no tours acccording your search</p>
+						)}
 					</>
-				) : (
-					<p>no tours acccording your search</p>
 				)}
 				{filteredTours === null && <p>...loading</p>}
 			</ul>
