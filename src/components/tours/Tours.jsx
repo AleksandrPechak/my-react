@@ -1,39 +1,62 @@
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 
-import { fetchTours } from '../../helpers/getTours';
+
+import { fetchTours } from '../../api/tours';
 import TourItem from '../tour-item/TourItem';
-import TourForm from '../tourForm/TourForm';
 
 import './Tours.scss';
 import TourFormik from '../tourFormik/TourFormik';
 
 const Tours = ({ theme }) => {
 	const [isOpen, setIsOpen] = useState(false);
-	const [tours, setTours] = useState(null);
+	const [loading, setLoading] = useState(false);
+	const [tours, setTours] = useState([]);
 
 	const [searchValue, setSearchValue] = useState('');
 
 	useEffect(() => {
-		// console.log('work after mount in Tours page');
 		const load = async () => {
-			const responseData = await fetchTours();
-			// console.log('load success', responseData);
-			window.localStorage.setItem('tours', JSON.stringify(responseData));
-			setTours(responseData);
+		// 	const res = await axios.get('http://localhost:3000/tours');
+			// 	console.log(res.data);
+			try {
+				setLoading(true);
+				const resData = await fetchTours();
+				console.log(resData);
+				setTours(resData);
+	        } catch (error) {
+				console.log(error);
+			} finally {
+				console.log('work finally');
+				setLoading(false);
+			}
+             
 		};
 
-		const localStorageData = window.localStorage.getItem('tours');
-
-		// console.log('response from localStorage', localStorageData);
-
-		if (localStorageData) {
-			setTours(JSON.parse(localStorageData));
-			// console.log(JSON.parse(localStorageData));
-		} else {
-			load();
-		}
+		load();
+		// console.log('work useEffect');
 	}, []);
+
+	// useEffect(() => {
+	// 	// console.log('work after mount in Tours page');
+	// 	const load = async () => {
+	// 		const responseData = await fetchTours();
+	// 		// console.log('load success', responseData);
+	// 		window.localStorage.setItem('tours', JSON.stringify(responseData));
+	// 		setTours(responseData);
+	// 	};
+
+	// 	const localStorageData = window.localStorage.getItem('tours');
+
+	// 	// console.log('response from localStorage', localStorageData);
+
+	// 	if (localStorageData) {
+	// 		setTours(JSON.parse(localStorageData));
+	// 		// console.log(JSON.parse(localStorageData));
+	// 	} else {
+	// 		load();
+	// 	}
+	// }, []);
 
 	const handleChangeSearch = (event) => {
 		setSearchValue(event.target.value);
@@ -65,9 +88,6 @@ const Tours = ({ theme }) => {
 		setTours(nextTours);
 	};
 
-	const filteredTours =
-		tours && tours.filter((tour) => tour.name.toLowerCase().includes(searchValue.toLowerCase()));
-
 	return (
 		<main
 			className={clsx('tours-page', {
@@ -92,21 +112,16 @@ const Tours = ({ theme }) => {
 			{/* <TourForm visible={isOpen} onClose={handleCloseModal} onAddTour={handleAddTour} /> */}
 			<TourFormik visible={isOpen} onClose={handleCloseModal} onAddTour={handleAddTour} />
 
+			{loading && <p>Loading data, please wait...</p>}
+
 			<ul className='tours-list'>
-				{filteredTours && (
+				{tours.length > 0 && (
 					<>
-						{filteredTours.length > 0 ? (
-							<>
-								{filteredTours.map((tour) => (
-									<TourItem key={tour.id} {...tour} onDelete={handleDeleteTour} />
-								))}
-							</>
-						) : (
-							<p>no tours acccording your search</p>
-						)}
+						{tours.map((tour) => (
+							<TourItem key={tour.id} {...tour} onDelete={handleDeleteTour} />
+						))}
 					</>
 				)}
-				{filteredTours === null && <p>...loading</p>}
 			</ul>
 		</main>
 	);
