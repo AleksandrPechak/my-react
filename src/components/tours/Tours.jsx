@@ -1,39 +1,37 @@
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 
-import { fetchTours } from '../../helpers/getTours';
 import TourItem from '../tour-item/TourItem';
-import TourForm from '../tourForm/TourForm';
+import TourFormik from '../tourFormik/TourFormik';
+
+import { fetchTours } from '../../api/tours';
 
 import './Tours.scss';
-import TourFormik from '../tourFormik/TourFormik';
 
 const Tours = ({ theme }) => {
 	const [isOpen, setIsOpen] = useState(false);
-	const [tours, setTours] = useState(null);
+	const [loading, setloading] = useState(false);
+	const [isError, setIsError] = useState(false);
+	const [tours, setTours] = useState([]);
 
 	const [searchValue, setSearchValue] = useState('');
 
-	useEffect(() => {
-		// console.log('work after mount in Tours page');
-		const load = async () => {
-			const responseData = await fetchTours();
-			// console.log('load success', responseData);
-			window.localStorage.setItem('tours', JSON.stringify(responseData));
-			setTours(responseData);
-		};
-
-		const localStorageData = window.localStorage.getItem('tours');
-
-		// console.log('response from localStorage', localStorageData);
-
-		if (localStorageData) {
-			setTours(JSON.parse(localStorageData));
-			// console.log(JSON.parse(localStorageData));
-		} else {
-			load();
+	const loadTourWithQuery = async (value) => {
+		try {
+			setTours([]);
+			setloading(true);
+			const resData = await fetchTours(value);
+			setTours(resData);
+		} catch (error) {
+			setIsError(true);
+		} finally {
+			setloading(false);
 		}
-	}, []);
+	};
+
+	useEffect(() => {
+		loadTourWithQuery(searchValue);
+	}, [searchValue]);
 
 	const handleChangeSearch = (event) => {
 		setSearchValue(event.target.value);
@@ -65,9 +63,6 @@ const Tours = ({ theme }) => {
 		setTours(nextTours);
 	};
 
-	const filteredTours =
-		tours && tours.filter((tour) => tour.name.toLowerCase().includes(searchValue.toLowerCase()));
-
 	return (
 		<main
 			className={clsx('tours-page', {
@@ -89,24 +84,19 @@ const Tours = ({ theme }) => {
 				</button>
 			</div>
 
-			{/* <TourForm visible={isOpen} onClose={handleCloseModal} onAddTour={handleAddTour} /> */}
 			<TourFormik visible={isOpen} onClose={handleCloseModal} onAddTour={handleAddTour} />
 
+			{loading && <p>Loading data, please wait...</p>}
+			{isError && <p>Whoops, something went wrong! Please try reloading this page!</p>}
+
 			<ul className='tours-list'>
-				{filteredTours && (
+				{tours.length > 0 && (
 					<>
-						{filteredTours.length > 0 ? (
-							<>
-								{filteredTours.map((tour) => (
-									<TourItem key={tour.id} {...tour} onDelete={handleDeleteTour} />
-								))}
-							</>
-						) : (
-							<p>no tours acccording your search</p>
-						)}
+						{tours.map((tour) => (
+							<TourItem key={tour.id} {...tour} onDelete={handleDeleteTour} />
+						))}
 					</>
 				)}
-				{filteredTours === null && <p>...loading</p>}
 			</ul>
 		</main>
 	);
