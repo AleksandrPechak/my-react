@@ -1,8 +1,4 @@
-import clsx from 'clsx';
-
 import TourItem from '../tour-item/TourItem';
-
-import './Tours.scss';
 
 const toursArray = [
 	{
@@ -11,7 +7,6 @@ const toursArray = [
 		price: 3000,
 		continent: 'Europe',
 		description: 'Best tour for discover Portugal',
-		isHot: true,
 	},
 	{
 		id: 2,
@@ -19,7 +14,6 @@ const toursArray = [
 		price: 5000,
 		continent: 'Europe',
 		description: 'Best tour for discover Italia',
-		isHot: false,
 	},
 	{
 		id: 3,
@@ -27,7 +21,6 @@ const toursArray = [
 		price: 1000,
 		continent: 'Europe',
 		description: 'A new experience from watching a bullfight',
-		isHot: true,
 	},
 	{
 		id: 4,
@@ -35,7 +28,6 @@ const toursArray = [
 		price: 15000,
 		continent: 'Europe',
 		description: 'A quick walk on the German autobahns',
-		isHot: true,
 	},
 	{
 		id: 5,
@@ -43,23 +35,24 @@ const toursArray = [
 		price: 10000,
 		continent: 'Asia',
 		// description: 'Best tour for discover Asia',
-		isHot: false,
 	},
 ];
 
-const Tours = ({ theme }) => {
-	console.log(theme);
+const Tours = () => {
 	return (
-		<main
-			className={clsx('tours-page', {
-				light: theme === 'light',
-				dark: theme === 'dark',
-			})}>
+		<main>
 			<h4>Tours Page</h4>
-			<ul className='tours-list'>
-				{toursArray.map((tour) => (
-					<TourItem key={tour.id} {...tour} />
-				))}
+			<ul>
+				{toursArray.map((tour) => {
+					return (
+						<TourItem
+							key={tour.id}
+							name={tour.name}
+							price={tour.price}
+							description={tour.description}
+						/>
+					);
+				})}
 			</ul>
 		</main>
 	);

@@ -1,7 +1,8 @@
-Lesson-2: Styling
-Є 4 основні підходи до стилізації - inline style , CSS (Less,Sass), CSS/Scss modules, CSS in JS
-'Глобальний css' - незалежно в якому місці був підключений фай css, компілюється все в ОДИН файл.
-застосовується останні стилі при одинакових класах
-CSS modules - одне з вирішень проблеми глобального css.
-Бібліотека clsx - функція яка повертає строку з назвами класів які = true
-Нормалізація стилів - приведення елементів до однієї поведінки для очікуваних дій при різних браузерах
+# React + Vite
+
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
