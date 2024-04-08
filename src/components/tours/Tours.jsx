@@ -1,22 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTheme } from '../theme-provider/ThemeProvider';
+import useToggle from '../../utils/hooks/useToggle';
 import clsx from 'clsx';
 
+import { DARK, LIGHT } from '../../utils/constantes';
+
 import TourItem from '../tour-item/TourItem';
-import TourFormik from '../tourFormik/TourFormik';
+// import TourFormik from '../tourFormik/TourFormik';
+import TourForm from '../tourForm/TourForm';
 
 import { fetchTours } from '../../api/tours';
 
 import './Tours.scss';
 
-const Tours = ({ theme }) => {
-	const [isOpen, setIsOpen] = useState(false);
+const Tours = () => {
+	const { isOpen, open, close } = useToggle();
+	const { theme } = useTheme() || {};
+	// const { theme } = useTheme();
+
 	const [loading, setloading] = useState(false);
 	const [isError, setIsError] = useState(false);
 	const [tours, setTours] = useState([]);
 
 	const [searchValue, setSearchValue] = useState('');
 
-	const loadTourWithQuery = async (value) => {
+	const loadTourWithQuery = useCallback(async (value) => {
 		try {
 			setTours([]);
 			setloading(true);
@@ -27,24 +35,14 @@ const Tours = ({ theme }) => {
 		} finally {
 			setloading(false);
 		}
-	};
+	}, []);
 
 	useEffect(() => {
 		loadTourWithQuery(searchValue);
-	}, [searchValue]);
+	}, [searchValue, loadTourWithQuery]);
 
 	const handleChangeSearch = (event) => {
 		setSearchValue(event.target.value);
-	};
-
-	// Modal actions
-
-	const handleOpenModal = () => {
-		setIsOpen(true);
-	};
-
-	const handleCloseModal = () => {
-		setIsOpen(false);
 	};
 
 	// Tour action
@@ -63,11 +61,16 @@ const Tours = ({ theme }) => {
 		setTours(nextTours);
 	};
 
+	const filteredTours = useMemo(
+		() => tours.filter((tour) => tour.name && tour.name.toLowerCase().includes(searchValue.toLowerCase())),
+		[searchValue, tours]
+	);
+
 	return (
 		<main
 			className={clsx('tours-page', {
-				light: theme === 'light',
-				dark: theme === 'dark',
+				light: theme === LIGHT,
+				dark: theme === DARK,
 			})}>
 			<div className='tours-page-top'>
 				<h4>Tours Page</h4>
@@ -79,20 +82,21 @@ const Tours = ({ theme }) => {
 					onChange={handleChangeSearch}
 				/>
 
-				<button className='btn secondary' onClick={handleOpenModal}>
+				<button className='btn secondary' onClick={open}>
 					Add tour
 				</button>
 			</div>
 
-			<TourFormik visible={isOpen} onClose={handleCloseModal} onAddTour={handleAddTour} />
+			{/* <TourFormik visible={isOpen} onClose={handleCloseModal} onAddTour={handleAddTour} /> */}
+			<TourForm visible={isOpen} onClose={close} onAddTour={handleAddTour} />
 
 			{loading && <p>Loading data, please wait...</p>}
 			{isError && <p>Whoops, something went wrong! Please try reloading this page!</p>}
 
 			<ul className='tours-list'>
-				{tours.length > 0 && (
+				{filteredTours.length > 0 && (
 					<>
-						{tours.map((tour) => (
+						{filteredTours.map((tour) => (
 							<TourItem key={tour.id} {...tour} onDelete={handleDeleteTour} />
 						))}
 					</>

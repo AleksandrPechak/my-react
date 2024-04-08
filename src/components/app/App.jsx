@@ -4,9 +4,11 @@ import dayjs from 'dayjs';
 import Header from '../header/Header';
 import Tours from '../tours/Tours';
 import Footer from '../footer/Footer';
+import { useTheme } from '../theme-provider/ThemeProvider';
 
 const App = () => {
-	const [theme, setTheme] = useState('light');
+	// const { theme } = useTheme();
+	const { theme } = useTheme() || {};
 	const [lastUpdatedDate, setLastUpdatedDate] = useState(null);
 
 	useEffect(() => {
@@ -14,18 +16,10 @@ const App = () => {
 		setLastUpdatedDate(dayjs());
 	}, [theme]);
 
-	const toggleTheme = () => {
-		if (theme === 'light') {
-			setTheme('dark');
-		} else {
-			setTheme('light');
-		}
-	};
-
 	return (
 		<div className='app-container'>
-			<Header theme={theme} toggleTheme={toggleTheme} lastUpdatedDate={lastUpdatedDate} />
-			<Tours theme={theme} />
+			<Header lastUpdatedDate={lastUpdatedDate} />
+			<Tours />
 			<Footer />
 		</div>
 	);
