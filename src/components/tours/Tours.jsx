@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { DARK, LIGHT } from '../../utils/constantes';
 
 import TourItem from '../tour-item/TourItem';
-// import TourFormik from '../tourFormik/TourFormik';
+import TourFormik from '../tourFormik/TourFormik';
 import TourForm from '../tourForm/TourForm';
 
 import { fetchTours } from '../../api/tours';
@@ -15,8 +15,7 @@ import './Tours.scss';
 
 const Tours = () => {
 	const { isOpen, open, close } = useToggle();
-	const { theme } = useTheme() || {};
-	// const { theme } = useTheme();
+	const { theme } = useTheme();
 
 	const [loading, setloading] = useState(false);
 	const [isError, setIsError] = useState(false);
@@ -62,7 +61,7 @@ const Tours = () => {
 	};
 
 	const filteredTours = useMemo(
-		() => tours.filter((tour) => tour.name && tour.name.toLowerCase().includes(searchValue.toLowerCase())),
+		() => tours.filter((tour) => tour.name.toLowerCase().includes(searchValue.toLowerCase())),
 		[searchValue, tours]
 	);
 

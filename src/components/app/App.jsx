@@ -1,14 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, } from 'react';
 import dayjs from 'dayjs';
 
 import Header from '../header/Header';
 import Tours from '../tours/Tours';
 import Footer from '../footer/Footer';
-import { useTheme } from '../theme-provider/ThemeProvider';
+import  { useTheme } from '../theme-provider/ThemeProvider';
 
 const App = () => {
-	// const { theme } = useTheme();
-	const { theme } = useTheme() || {};
+	const { theme } = useTheme();
 	const [lastUpdatedDate, setLastUpdatedDate] = useState(null);
 
 	useEffect(() => {
@@ -21,7 +20,7 @@ const App = () => {
 			<Header lastUpdatedDate={lastUpdatedDate} />
 			<Tours />
 			<Footer />
-		</div>
+			</div>
 	);
 };
 

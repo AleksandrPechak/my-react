@@ -1,27 +1,16 @@
-import { useEffect } from 'react';
 import { SiYourtraveldottv } from 'react-icons/si';
+import { useTheme } from '../theme-provider/ThemeProvider';
 
 import './Header.scss';
 
 const Header = (props) => {
-	useEffect(() => {
-		// addEventListner
-		// setTimeout
-		// setInterval
-
-		return () => {
-			// console.log('work');
-			// removeEventListener()
-			// clearTimeout()
-			// clearInterval()
-		};
-	}, []);
-
+	const { theme, onToggleTheme } = useTheme();
+	// console.log(theme);
 	return (
 		<header>
 			<div className='controlls'>
-				<button className='btn primary' onClick={props.toggleTheme}>
-					Toggle Theme {props.theme}
+				<button className='btn primary' onClick={onToggleTheme}>
+					Toggle Theme {theme}
 				</button>
 
 				<SiYourtraveldottv />

@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import './TourForm.scss';
 
 const continents = [
@@ -26,6 +26,8 @@ const TourForm = ({ visible, onClose, onAddTour }) => {
 
 	const [newTour, setNewTour] = useState(initialTour);
 
+	const formRef = useRef();
+
 	useEffect(() => {
 		if (!visible) {
 			handleReset();
@@ -42,6 +44,7 @@ const TourForm = ({ visible, onClose, onAddTour }) => {
 
 	const handleReset = () => {
 		setNewTour(initialTour);
+		// console.log(formRef.current.reset());
 	};
 
 	const handleSubmitFunc = (event) => {
@@ -58,7 +61,7 @@ const TourForm = ({ visible, onClose, onAddTour }) => {
 			isHot: isHot.checked,
 		};
 
-		onAddTour(nextTour);
+		// onAddTour(nextTour);
 		event.target.reset();
 		onClose();
 	};
@@ -74,17 +77,18 @@ const TourForm = ({ visible, onClose, onAddTour }) => {
 			<button className='close' onClick={onClose}>
 				x
 			</button>
+
 			<h2>Tour form</h2>
 
-			<form id='add-tour' onSubmit={handleSubmit}>
+			<form id='add-tour' onSubmit={handleSubmitFunc} ref={formRef}>
 				<div className='common-input-wrapper'>
 					<label htmlFor={nameInputId}>Name</label>
 					<input
 						id={nameInputId}
 						type='text'
 						name='name'
-						onChange={handleChangeTour}
-						value={newTour.name}
+						// onChange={handleChangeTour}
+						// value={newTour.name}
 					/>
 				</div>
 				<div className='common-input-wrapper'>
@@ -102,13 +106,17 @@ const TourForm = ({ visible, onClose, onAddTour }) => {
 					<textarea
 						rows={5}
 						name='description'
-						value={newTour.description}
-						onChange={handleChangeTour}
+						// value={newTour.description}
+						// onChange={handleChangeTour}
 					/>
 				</div>
 				<div className='common-input-wrapper'>
 					<label>Continent</label>
-					<select name='continent' value={newTour.continent} onChange={handleChangeTour}>
+					<select
+						name='continent'
+						// value={newTour.continent}
+						// onChange={handleChangeTour}
+					>
 						{continents.map((continent) => (
 							<option key={continent} value={continent}>
 								{continent}
@@ -123,8 +131,8 @@ const TourForm = ({ visible, onClose, onAddTour }) => {
 							type='radio'
 							name='ageCategory'
 							value='children'
-							checked={newTour.ageCategory === 'children'}
-							onChange={handleChangeTour}
+							// checked={newTour.ageCategory === 'children'}
+							// onChange={handleChangeTour}
 						/>
 						With children
 					</label>
@@ -133,8 +141,8 @@ const TourForm = ({ visible, onClose, onAddTour }) => {
 							type='radio'
 							name='ageCategory'
 							value='adult'
-							checked={newTour.ageCategory === 'adult'}
-							onChange={handleChangeTour}
+							// checked={newTour.ageCategory === 'adult'}
+							// onChange={handleChangeTour}
 						/>
 						18+
 					</label>
@@ -145,8 +153,8 @@ const TourForm = ({ visible, onClose, onAddTour }) => {
 						type='checkbox'
 						name='isHot'
 						value={newTour.isHot}
-						checked={newTour.isHot}
-						onChange={handleChangeTour}
+						// checked={newTour.isHot}
+						// onChange={handleChangeTour}
 					/>
 				</div>
 
