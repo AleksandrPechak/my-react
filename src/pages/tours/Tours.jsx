@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTheme } from '../theme-provider/ThemeProvider';
+// import { Outlet } from 'react-router-dom';
+import { useTheme } from '../../components/theme-provider/ThemeProvider';
 import useToggle from '../../utils/hooks/useToggle';
 import clsx from 'clsx';
 
 import { DARK, LIGHT } from '../../utils/constantes';
 
-import TourItem from '../tour-item/TourItem';
-import TourFormik from '../tourFormik/TourFormik';
-import TourForm from '../tourForm/TourForm';
+import TourItem from '../../components/tour-item/TourItem';
+// import TourFormik from '../../components/tourFormik/TourFormik';
+import TourForm from '../../components/tourForm/TourForm';
 
 import { fetchTours } from '../../api/tours';
 
@@ -61,9 +62,19 @@ const Tours = () => {
 	};
 
 	const filteredTours = useMemo(
-		() => tours.filter((tour) => tour.name.toLowerCase().includes(searchValue.toLowerCase())),
-		[searchValue, tours]
-	);
+	() => {
+		return tours.filter((tour) => {
+			const tourName = tour.name ? tour.name.toLowerCase() : '';
+			return tourName.includes(searchValue.toLowerCase());
+		});
+	},
+	[searchValue, tours]
+);
+
+	// const filteredTours = useMemo(
+	// 	() => tours.filter((tour) => tour.name.toLowerCase().includes(searchValue.toLowerCase())),
+	// 	[searchValue, tours]
+	// );
 
 	return (
 		<main

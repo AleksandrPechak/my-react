@@ -16,4 +16,33 @@
         color: #3687ee;
         background: #fff;
     }
+
+    &.disabled {
+        background: #c9c9c9;
+        cursor: not-allowed;
+    }
+}
+
+.common-input-wrapper {
+    label {
+        display: block;
+    }
+
+    input,
+    textarea {
+        display: block;
+        width: 100%;
+        text-align: left;
+    }
+
+    .common-error-msg {
+        color: red;
+        margin-top: 4px;
+    }
+}
+
+.common-page-container {
+    padding: 10px 40px;
+    height: calc(100vh - 200px);
+    overflow-y: auto;
 }

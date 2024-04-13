@@ -1,25 +1,25 @@
 .tour-item {
-    max-width: 100%;
-    margin-top: 30px;
-    list-style: none;
-    min-height: 200px;
-    padding: 10px 20px;
-    background: #c9c9c9;
-    border: 1px solid #000;
-    border-radius: 6px;
+  max-width: 100%;
+  margin-top: 30px;
+  list-style: none;
+  min-height: 200px;
+  padding: 10px 20px;
+  background: #c9c9c9;
+  border: 1px solid #000;
+  border-radius: 6px;
 
-    .tour-item-row {
-        height: 30px;
-        display: flex;
-        justify-content: flex-start;
+  .tour-item-row {
+    height: 30px;
+    display: flex;
+    justify-content: flex-start;
 
-        .title {
-            margin-right: 8px;
-            font-weight: 700;
-        }
+    .title {
+      margin-right: 8px;
+      font-weight: 700;
     }
+  }
 }
 
 .isHot {
-    border: 1px solid red;
+  border: 1px solid red;
 }

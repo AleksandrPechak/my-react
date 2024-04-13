@@ -7,5 +7,9 @@ const fetchTours = async (query) => {
 	const res = await axios.get(requestUrl);
 	return res.data;
 };
+const fetchToursById = async (id) => {
+	const res = await axios.get(`/tours?id=${id}`);
+	return res.data;
+};
 
-export { fetchTours };
+export { fetchTours, fetchToursById };
