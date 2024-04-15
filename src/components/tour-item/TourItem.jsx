@@ -47,6 +47,7 @@ const TourItem = ({ id, name, price, description, continent, ageCategory, isHot,
 			</div>
 
 			{+tourId === id && <Outlet />}
+			{/* <Outlet /> */}
 		</li>
 	);
 };
