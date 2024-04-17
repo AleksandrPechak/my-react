@@ -17,12 +17,12 @@ const TourItem = ({ id, name, price, description, continent, ageCategory, isHot,
 				<p>{price}$</p>
 			</div>
 
-			{description && (
+			{/* {description && (
 				<div className='tour-item-row'>
 					<p className='title'>Description:</p>
 					<p>{description}</p>
 				</div>
-			)}
+			)} */}
 			<div className='tour-item-row'>
 				<p className='title'>Continent:</p>
 				<p>{continent}</p>
@@ -37,17 +37,16 @@ const TourItem = ({ id, name, price, description, continent, ageCategory, isHot,
 				<button className='btn secondary' onClick={() => onDelete(id)}>
 					Delete
 				</button>
-				<Link to={`/tours/${id}`} className='btn secondary'>
+				<Link to={`/${id}`} className='btn secondary' state={{ description }}>
 					More
 				</Link>
 
-				<Link to={`/tours/details/${id}`} className='btn secondary'>
+				<Link to={`/details/${id}`} className='btn secondary' replace>
 					Details
 				</Link>
 			</div>
 
-			{+tourId === id && <Outlet />}
-			{/* <Outlet /> */}
+			{tourId === id && <Outlet />}
 		</li>
 	);
 };

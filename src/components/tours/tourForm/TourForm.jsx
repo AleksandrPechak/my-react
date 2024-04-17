@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './TourForm.scss';
 
 const continents = [
@@ -23,6 +24,8 @@ const initialTour = {
 const TourForm = ({ visible, onClose, onAddTour }) => {
 	const nameInputId = useId();
 	const priceInputId = useId();
+
+	const navigate = useNavigate();
 
 	const [newTour, setNewTour] = useState(initialTour);
 
@@ -64,6 +67,7 @@ const TourForm = ({ visible, onClose, onAddTour }) => {
 		// onAddTour(nextTour);
 		event.target.reset();
 		onClose();
+		navigate(`details/${nextTour.id}`);
 	};
 
 	const handleSubmit = (e) => {

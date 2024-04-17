@@ -1,4 +1,4 @@
-import TourItem from '../../components/tour-item/TourItem';
+import TourItem from '../../components/tours/tour-item/TourItem';
 
 import './About.scss';
 

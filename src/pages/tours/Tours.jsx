@@ -1,119 +1,115 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-// import { Outlet } from 'react-router-dom';
-import { useTheme } from "../../components/theme-provider/ThemeProvider";
-import useToggle from "../../utils/hooks/useToggle";
-import clsx from "clsx";
+import { useCallback, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { useTheme } from '../../components/theme-provider/ThemeProvider';
+import useToggle from '../../utils/hooks/useToggle';
+import clsx from 'clsx';
 
-import { DARK, LIGHT } from "../../utils/constantes";
+import { DARK, LIGHT } from '../../utils/constantes';
 
-import TourItem from "../../components/tour-item/TourItem";
-// import TourFormik from '../../components/tourFormik/TourFormik';
-import TourForm from "../../components/tourForm/TourForm";
+import Loader from '../../components/common/loader/Loader';
+import ErrorMessage from '../../components/common/error-message/ErrorMessage';
 
-import { fetchTours } from "../../api/tours";
+// import TourFormik from '../../components/tours/tourFormik/TourFormik';
+import TourForm from '../../components/tours/tourForm/TourForm';
+import TourList from '../../components/tours/tour-list/TourList';
 
-import "./Tours.scss";
+import { fetchTours } from '../../api/tours';
+
+import './Tours.scss';
 
 const Tours = () => {
-  const { isOpen, open, close } = useToggle();
-  const { theme } = useTheme();
+	const { isOpen, open, close } = useToggle();
+	const { theme } = useTheme();
 
-  const [loading, setloading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [tours, setTours] = useState([]);
+	const [loading, setloading] = useState(false);
+	const [isError, setIsError] = useState(false);
+	const [tours, setTours] = useState([]);
 
-  const [searchValue, setSearchValue] = useState("");
+	// State
 
-  const loadTourWithQuery = useCallback(async (value) => {
-    try {
-      setTours([]);
-      setloading(true);
-      const resData = await fetchTours(value);
-      setTours(resData);
-    } catch (error) {
-      setIsError(true);
-    } finally {
-      setloading(false);
-    }
-  }, []);
+	// const [searchValue, setSearchValue] = useState('');
 
-  useEffect(() => {
-    loadTourWithQuery(searchValue);
-  }, [searchValue, loadTourWithQuery]);
+	// URL Query string
 
-  const handleChangeSearch = (event) => {
-    setSearchValue(event.target.value);
-  };
+	const [searchParams, setSearchParams] = useSearchParams();
+	const searchValue = searchParams.get('name');
 
-  // Tour action
+	const loadTourWithQuery = useCallback(async (value) => {
+		try {
+			setTours([]);
+			setloading(true);
+			const resData = await fetchTours(value);
+			setTours(resData);
+		} catch (error) {
+			setIsError(true);
+		} finally {
+			setloading(false);
+		}
+	}, []);
 
-  const handleAddTour = (tourItem) => {
-    setTours((prevState) => {
-      // return new state
-      return [...prevState, tourItem];
-    });
-  };
+	useEffect(() => {
+		loadTourWithQuery(searchValue);
+	}, [searchValue, loadTourWithQuery]);
 
-  const handleDeleteTour = (id) => {
-    const nextTours = [...tours];
-    const index = nextTours.findIndex((tour) => tour.id === id);
-    nextTours.splice(index, 1);
-    setTours(nextTours);
-  };
+	const handleChangeSearch = (event) => {
+		// setSearchValue(event.target.value);
 
-  const filteredTours = useMemo(() => {
-    return tours.filter((tour) => {
-      const tourName = tour.name ? tour.name.toLowerCase() : "";
-      return tourName.includes(searchValue.toLowerCase());
-    });
-  }, [searchValue, tours]);
+		setSearchParams({ name: event.target.value });
 
-  // const filteredTours = useMemo(
-  // 	() => tours.filter((tour) => tour.name.toLowerCase().includes(searchValue.toLowerCase())),
-  // 	[searchValue, tours]
-  // );
+		// Update specific params, save existed
 
-  return (
-    <main
-      className={clsx("tours-page", {
-        light: theme === LIGHT,
-        dark: theme === DARK,
-      })}
-    >
-      <div className="tours-page-top">
-        <h4>Tours Page</h4>
+		// setSearchParams((searchParams) => {
+		// 	searchParams.set('name', event.target.value);
+		// 	return searchParams;
+		// });
+	};
 
-        <input
-          type="text"
-          value={searchValue}
-          placeholder="Search..."
-          onChange={handleChangeSearch}
-        />
+	// Tour action
 
-        <button className="btn secondary" onClick={open}>
-          Add tour
-        </button>
-      </div>
+	const handleAddTour = (tourItem) => {
+		setTours((prevState) => {
+			// return new state
+			return [...prevState, tourItem];
+		});
+	};
 
-      {/* <TourFormik visible={isOpen} onClose={handleCloseModal} onAddTour={handleAddTour} /> */}
-      <TourForm visible={isOpen} onClose={close} onAddTour={handleAddTour} />
+	const handleDeleteTour = (id) => {
+		const nextTours = [...tours];
+		const index = nextTours.findIndex((tour) => tour.id === id);
+		nextTours.splice(index, 1);
+		setTours(nextTours);
+	};
 
-      {loading && <p>Loading data, please wait...</p>}
-      {isError && (
-        <p>Whoops, something went wrong! Please try reloading this page!</p>
-      )}
+	return (
+		<main
+			className={clsx('tours-page', {
+				light: theme === LIGHT,
+				dark: theme === DARK,
+			})}>
+			<div className='tours-page-top'>
+				<h4>Tours Page</h4>
 
-      <ul className="tours-list">
-        {filteredTours.length > 0 && (
-          <>
-            {filteredTours.map((tour) => (
-              <TourItem key={tour.id} {...tour} onDelete={handleDeleteTour} />
-            ))}
-          </>
-        )}
-      </ul>
-    </main>
-  );
+				<input
+					type='text'
+					value={searchValue || ''}
+					placeholder='Search...'
+					onChange={handleChangeSearch}
+				/>
+
+				<button className='btn secondary' onClick={open}>
+					Add tour
+				</button>
+			</div>
+
+			{/* <TourFormik visible={isOpen} onClose={handleCloseModal} onAddTour={handleAddTour} /> */}
+			<TourForm visible={isOpen} onClose={close} onAddTour={handleAddTour} />
+
+			{loading && <Loader />}
+			{isError && <ErrorMessage />}
+
+			{tours.length > 0 && <TourList tours={tours} onDelete={handleDeleteTour} />}
+		</main>
+	);
 };
 
 export default Tours;
