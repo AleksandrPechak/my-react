@@ -61,17 +61,20 @@ const Tours = () => {
     setTours(nextTours);
   };
 
-  const filteredTours = useMemo(() => {
-    return tours.filter((tour) => {
-      const tourName = tour.name ? tour.name.toLowerCase() : "";
-      return tourName.includes(searchValue.toLowerCase());
-    });
-  }, [searchValue, tours]);
+    const filteredTours = useMemo(() => {
+      return tours.filter((tour) => {
+        const tourName = tour.name ? tour.name.toLowerCase() : "";
+        return tourName.includes(searchValue.toLowerCase());
+      });
+    }, [searchValue, tours]);
 
-  // const filteredTours = useMemo(
-  // 	() => tours.filter((tour) => tour.name.toLowerCase().includes(searchValue.toLowerCase())),
-  // 	[searchValue, tours]
-  // );
+//   const filteredTours = useMemo(
+//     () =>
+//       tours.filter((tour) =>
+//         tour.name.toLowerCase().includes(searchValue?.toLowerCase())
+//       ),
+//     [searchValue, tours]
+//   );
 
   return (
     <main
