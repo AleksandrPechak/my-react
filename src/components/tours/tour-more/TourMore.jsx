@@ -1,7 +1,10 @@
-import { useParams, Outlet, Link } from 'react-router-dom';
+import { useParams, Outlet, Link, useLocation } from 'react-router-dom';
 
 const TourMore = () => {
 	const { tourId } = useParams();
+	const location = useLocation();
+
+	console.log(location);
 
 	return (
 		<div>
