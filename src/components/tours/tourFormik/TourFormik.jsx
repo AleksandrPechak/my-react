@@ -3,6 +3,9 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { v4 as uuidv4 } from 'uuid';
 
+import { useDispatch } from 'react-redux';
+import { addNewTour } from '../../../redux/tours/actions';
+
 const continents = [
 	'Asia',
 	'Africa',
@@ -14,11 +17,11 @@ const continents = [
 ];
 
 const initialTour = {
-	name: '',
-	price: '',
-	description: '',
-	continent: 'none',
-	ageCategory: null,
+	name: 'example',
+	price: 1000,
+	description: 'example',
+	continent: 'Asia',
+	ageCategory: 'children',
 	isHot: false,
 };
 
@@ -31,14 +34,19 @@ const TourSchema = Yup.object().shape({
 	continent: Yup.string().oneOf(continents).required(),
 });
 
-const TourFormik = ({ visible, onClose, onAddTour }) => {
+const TourFormik = ({ visible, onClose }) => {
+	const dispatch = useDispatch();
+
 	const handleSubmit = (values, actions) => {
 		const nextTour = {
 			...values,
 			id: uuidv4(),
 			name: values.name.trim(),
 		};
-		onAddTour(nextTour);
+
+		const action = addNewTour(nextTour);
+		dispatch(action);
+
 		actions.resetForm();
 		onClose();
 	};

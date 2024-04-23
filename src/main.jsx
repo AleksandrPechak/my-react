@@ -1,20 +1,25 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 
-import App from './App';
-import ThemeProvider from './components/theme-provider/ThemeProvider';
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
-import 'modern-normalize';
-import './assets/common.scss';
-import './index.css';
+import App from "./App";
+import ThemeProvider from "./components/theme-provider/ThemeProvider";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-	// <React.StrictMode>
-	<BrowserRouter>
-		<ThemeProvider>
-			<App />
-		</ThemeProvider>
-	</BrowserRouter>
-	// </React.StrictMode>
+import "modern-normalize";
+import "./assets/common.scss";
+import "./index.css";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  // <React.StrictMode>
+  <Provider store={store}>
+    <BrowserRouter>
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
+    </BrowserRouter>
+  </Provider>
+  // </React.StrictMode>
 );

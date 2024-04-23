@@ -1,10 +1,19 @@
 import { Link, Outlet, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
+
+import { deleteTour } from '../../../redux/tours/actions';
 
 import './TourItem.scss';
 
 const TourItem = ({ id, name, price, description, continent, ageCategory, isHot, onDelete }) => {
+	const dispatch = useDispatch();
 	const { tourId } = useParams();
+
+	const handleDeleteTour = () => {
+		const action = deleteTour(id);
+		dispatch(action);
+	};
 
 	return (
 		<li className={clsx('tour-item', { isHot: isHot })}>
@@ -34,7 +43,7 @@ const TourItem = ({ id, name, price, description, continent, ageCategory, isHot,
 				</div>
 			)}
 			<div className='tour-item-row controlls'>
-				<button className='btn secondary' onClick={() => onDelete(id)}>
+				<button className='btn secondary' onClick={handleDeleteTour}>
 					Delete
 				</button>
 				<Link to={`/${id}`} className='btn secondary' state={{ description }}>

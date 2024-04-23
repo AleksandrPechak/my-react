@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+
 import { useTheme } from '../../components/theme-provider/ThemeProvider';
 import useToggle from '../../utils/hooks/useToggle';
 import clsx from 'clsx';
@@ -9,7 +10,7 @@ import { DARK, LIGHT } from '../../utils/constantes';
 import Loader from '../../components/common/loader/Loader';
 import ErrorMessage from '../../components/common/error-message/ErrorMessage';
 
-// import TourFormik from '../../components/tours/tourFormik/TourFormik';
+import TourFormik from '../../components/tours/tourFormik/TourFormik';
 import TourForm from '../../components/tours/tourForm/TourForm';
 import TourList from '../../components/tours/tour-list/TourList';
 
@@ -23,7 +24,6 @@ const Tours = () => {
 
 	const [loading, setloading] = useState(false);
 	const [isError, setIsError] = useState(false);
-	const [tours, setTours] = useState([]);
 
 	// State
 
@@ -34,22 +34,22 @@ const Tours = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const searchValue = searchParams.get('name');
 
-	const loadTourWithQuery = useCallback(async (value) => {
-		try {
-			setTours([]);
-			setloading(true);
-			const resData = await fetchTours(value);
-			setTours(resData);
-		} catch (error) {
-			setIsError(true);
-		} finally {
-			setloading(false);
-		}
-	}, []);
+	// const loadTourWithQuery = useCallback(async (value) => {
+	// 	try {
+	// 		setTours([]);
+	// 		setloading(true);
+	// 		const resData = await fetchTours(value);
+	// 		setTours(resData);
+	// 	} catch (error) {
+	// 		setIsError(true);
+	// 	} finally {
+	// 		setloading(false);
+	// 	}
+	// }, []);
 
-	useEffect(() => {
-		loadTourWithQuery(searchValue);
-	}, [searchValue, loadTourWithQuery]);
+	// useEffect(() => {
+	// 	loadTourWithQuery(searchValue);
+	// }, [searchValue, loadTourWithQuery]);
 
 	const handleChangeSearch = (event) => {
 		// setSearchValue(event.target.value);
@@ -65,20 +65,6 @@ const Tours = () => {
 	};
 
 	// Tour action
-
-	const handleAddTour = (tourItem) => {
-		setTours((prevState) => {
-			// return new state
-			return [...prevState, tourItem];
-		});
-	};
-
-	const handleDeleteTour = (id) => {
-		const nextTours = [...tours];
-		const index = nextTours.findIndex((tour) => tour.id === id);
-		nextTours.splice(index, 1);
-		setTours(nextTours);
-	};
 
 	return (
 		<main
@@ -101,13 +87,13 @@ const Tours = () => {
 				</button>
 			</div>
 
-			{/* <TourFormik visible={isOpen} onClose={handleCloseModal} onAddTour={handleAddTour} /> */}
-			<TourForm visible={isOpen} onClose={close} onAddTour={handleAddTour} />
+			<TourFormik visible={isOpen} onClose={close} />
+			{/* <TourForm visible={isOpen} onClose={close} onAddTour={handleAddTour} /> */}
 
 			{loading && <Loader />}
 			{isError && <ErrorMessage />}
 
-			{tours.length > 0 && <TourList tours={tours} onDelete={handleDeleteTour} />}
+			<TourList />
 		</main>
 	);
 };
