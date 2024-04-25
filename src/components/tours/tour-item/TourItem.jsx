@@ -2,17 +2,16 @@ import { Link, Outlet, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 
-import { deleteTour } from '../../../redux/tours/actions';
+import { removeTour } from '../../../redux/tours/slice';
 
 import './TourItem.scss';
 
-const TourItem = ({ id, name, price, description, continent, ageCategory, isHot, onDelete }) => {
+const TourItem = ({ id, name, price, description, continent, ageCategory, isHot }) => {
 	const dispatch = useDispatch();
 	const { tourId } = useParams();
 
 	const handleDeleteTour = () => {
-		const action = deleteTour(id);
-		dispatch(action);
+		dispatch(removeTour(id));
 	};
 
 	return (

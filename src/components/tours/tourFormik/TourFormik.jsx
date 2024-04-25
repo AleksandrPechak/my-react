@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useDispatch } from 'react-redux';
-import { addNewTour } from '../../../redux/tours/actions';
+import { addTour } from '../../../redux/tours/slice';
 
 const continents = [
 	'Asia',
@@ -44,8 +44,7 @@ const TourFormik = ({ visible, onClose }) => {
 			name: values.name.trim(),
 		};
 
-		const action = addNewTour(nextTour);
-		dispatch(action);
+		dispatch(addTour(nextTour));
 
 		actions.resetForm();
 		onClose();

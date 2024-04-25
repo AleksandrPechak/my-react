@@ -26,7 +26,7 @@ const App = () => {
 		setLastUpdatedDate(dayjs());
 	}, [theme]);
 
-	console.log(location);
+	// console.log(location);
 
 	// useEffect(() => {
 	// 	console.log('url path name was changed to:', location.pathname);
