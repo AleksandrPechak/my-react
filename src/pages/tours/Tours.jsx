@@ -1,5 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
+
+import { selectTours } from '../../redux/tours/slice';
+
+import { fetchToursThunk } from '../../redux/tours/operation';
 
 import { useTheme } from '../../components/theme-provider/ThemeProvider';
 import useToggle from '../../utils/hooks/useToggle';
@@ -11,19 +16,22 @@ import Loader from '../../components/common/loader/Loader';
 import ErrorMessage from '../../components/common/error-message/ErrorMessage';
 
 import TourFormik from '../../components/tours/tourFormik/TourFormik';
-import TourForm from '../../components/tours/tourForm/TourForm';
+// import TourForm from '../../components/tours/tourForm/TourForm';
 import TourList from '../../components/tours/tour-list/TourList';
-
-import { fetchTours } from '../../api/tours';
 
 import './Tours.scss';
 
 const Tours = () => {
+	const dispatch = useDispatch();
 	const { isOpen, open, close } = useToggle();
 	const { theme } = useTheme();
 
-	const [loading, setloading] = useState(false);
-	const [isError, setIsError] = useState(false);
+	const { isLoading, error, items } = useSelector(selectTours);
+
+	useEffect(() => {
+		// dispatch(fetchTours());
+		dispatch(fetchToursThunk());
+	}, [dispatch]);
 
 	// State
 
@@ -33,23 +41,6 @@ const Tours = () => {
 
 	const [searchParams, setSearchParams] = useSearchParams();
 	const searchValue = searchParams.get('name');
-
-	// const loadTourWithQuery = useCallback(async (value) => {
-	// 	try {
-	// 		setTours([]);
-	// 		setloading(true);
-	// 		const resData = await fetchTours(value);
-	// 		setTours(resData);
-	// 	} catch (error) {
-	// 		setIsError(true);
-	// 	} finally {
-	// 		setloading(false);
-	// 	}
-	// }, []);
-
-	// useEffect(() => {
-	// 	loadTourWithQuery(searchValue);
-	// }, [searchValue, loadTourWithQuery]);
 
 	const handleChangeSearch = (event) => {
 		// setSearchValue(event.target.value);
@@ -63,8 +54,6 @@ const Tours = () => {
 		// 	return searchParams;
 		// });
 	};
-
-	// Tour action
 
 	return (
 		<main
@@ -90,10 +79,9 @@ const Tours = () => {
 			<TourFormik visible={isOpen} onClose={close} />
 			{/* <TourForm visible={isOpen} onClose={close} onAddTour={handleAddTour} /> */}
 
-			{loading && <Loader />}
-			{isError && <ErrorMessage />}
-
-			<TourList />
+			{isLoading && <Loader />}
+			{error && <ErrorMessage text={error} />}
+			{items && <TourList tours={items} />}
 		</main>
 	);
 };

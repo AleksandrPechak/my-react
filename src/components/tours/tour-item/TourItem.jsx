@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import { removeTour } from '../../../redux/tours/slice';
 
 import './TourItem.scss';
+// import { removeTourByIdThunk } from '../../../redux/tours/operation';
 
 const TourItem = ({ id, name, price, description, continent, ageCategory, isHot }) => {
 	const dispatch = useDispatch();
@@ -12,6 +13,7 @@ const TourItem = ({ id, name, price, description, continent, ageCategory, isHot 
 
 	const handleDeleteTour = () => {
 		dispatch(removeTour(id));
+		// dispatch(removeTourByIdThunk(id));
 	};
 
 	return (

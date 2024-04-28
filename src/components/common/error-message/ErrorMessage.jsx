@@ -1,5 +1,5 @@
-const ErrorMessage = () => {
-	return <p>Whoops, something went wrong! Please try reloading this page!</p>;
+const ErrorMessage = ({text}) => {
+	return <p>{text}</p>;
 };
 
 export default ErrorMessage;
